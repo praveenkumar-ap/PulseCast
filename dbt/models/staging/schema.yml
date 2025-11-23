@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_sku
+    description: "Cleaned SKU seed data"
+    columns:
+      - name: sku_id
+        tests:
+          - not_null
+          - unique
+      - name: sku_code
+      - name: sku_name
+      - name: family_id
+      - name: family_name
+      - name: shelf_life_days
+      - name: uom
+
+  - name: stg_demand
+    description: "Cleaned daily demand seed data"
+    columns:
+      - name: sku_id
+        tests:
+          - not_null
+      - name: demand_date
+        tests:
+          - not_null
+      - name: qty
+        tests:
+          - not_null
+          - non_negative

@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_sku
+    description: "SKU dimension derived from staging data"
+    columns:
+      - name: sku_id
+        tests:
+          - not_null
+          - unique
+      - name: sku_code
+      - name: sku_name
+      - name: family_id
+      - name: family_name
+      - name: shelf_life_days
+      - name: uom

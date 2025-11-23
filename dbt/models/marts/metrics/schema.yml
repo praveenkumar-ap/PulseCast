@@ -1,0 +1,110 @@
+version: 2
+
+models:
+  - name: forecast_run_summary
+    description: "Run-level forecast metrics."
+    columns:
+      - name: run_id
+        description: "Forecast run identifier."
+        tests:
+          - not_null
+          - unique
+      - name: run_type
+        description: "Type of run."
+        tests:
+          - not_null
+      - name: horizon_start_month
+        description: "Start of evaluation horizon."
+      - name: horizon_end_month
+        description: "End of evaluation horizon."
+      - name: skus_covered
+        description: "Number of SKUs covered."
+      - name: mape
+        description: "Mean absolute percentage error."
+      - name: wape
+        description: "Weighted absolute percentage error."
+      - name: bias
+        description: "Bias (signed percent)."
+      - name: mae
+        description: "Mean absolute error."
+      - name: computed_at
+        description: "Metrics computation timestamp."
+        tests:
+          - not_null
+
+  - name: forecast_accuracy_by_sku_month
+    description: "Per SKU/month accuracy metrics."
+    columns:
+      - name: run_id
+        tests:
+          - not_null
+      - name: sku_id
+        tests:
+          - not_null
+      - name: year_month
+        tests:
+          - not_null
+      - name: actual_units
+      - name: forecast_p50_units
+      - name: abs_error
+      - name: ape
+
+  - name: value_impact_summary
+    description: "ROI/value impact summary per run."
+    columns:
+      - name: run_id
+        description: "Forecast run identifier."
+      - name: rev_uplift_estimate
+      - name: scrap_avoidance_estimate
+      - name: wc_savings_estimate
+      - name: productivity_savings_estimate
+      - name: assumptions_json
+      - name: computed_at
+
+  - name: value_run_value_summary
+    description: "Run-level value and ROI summary."
+    columns:
+      - name: run_id
+        description: "Run identifier."
+        tests:
+          - not_null
+          - unique
+      - name: run_type
+        description: "Run type classification."
+      - name: period_start
+        description: "Start period for value horizon."
+      - name: period_end
+        description: "End period for value horizon."
+      - name: forecast_accuracy_uplift_pct
+        description: "Improvement vs baseline."
+      - name: total_value_estimate
+        description: "Total estimated value."
+      - name: case_label
+        description: "Value case classification."
+
+  - name: value_scenario_value_summary
+    description: "Scenario-level value summary."
+    columns:
+      - name: scenario_id
+        description: "Scenario identifier."
+        tests:
+          - not_null
+          - unique
+      - name: scenario_name
+        description: "Scenario name."
+      - name: total_expected_value_estimate
+        description: "Total expected value for scenario."
+      - name: case_label
+        description: "Value case classification."
+
+  - name: value_benchmarks
+    description: "Benchmark metrics for value/ROI."
+    columns:
+      - name: metric_name
+        description: "Metric name."
+        tests:
+          - not_null
+      - name: scope
+        description: "Scope for benchmark (GLOBAL/FAMILY/etc)."
+      - name: value_numeric
+        description: "Numeric value for benchmark."

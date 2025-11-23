@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg[binary]
+pydantic-settings
+kafka-python
+requests
+pytest
+httpx

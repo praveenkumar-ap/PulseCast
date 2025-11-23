@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: monitor_indicator_freshness_status
+    description: "Monitor indicator freshness vs SLA."
+    columns:
+      - name: indicator_id
+        tests:
+          - not_null
+      - name: indicator_name
+      - name: provider
+      - name: last_data_time
+      - name: lag_hours
+      - name: sla_freshness_hours
+      - name: is_within_sla
+
+  - name: monitor_forecast_accuracy_daily
+    description: "Monitor accuracy trend and uplift over time."
+    columns:
+      - name: year_month
+        tests:
+          - not_null
+      - name: accuracy_metric
+        description: "Average APE across SKUs/month."
+      - name: accuracy_uplift_pct
+        description: "Uplift vs baseline if provided."

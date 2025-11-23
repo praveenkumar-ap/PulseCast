@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: api_audit_log
+    description: "API audit trail for pulsecast_api."
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+      - name: path
+        tests:
+          - not_null
+      - name: method
+        tests:
+          - not_null
+      - name: status_code
+        tests:
+          - not_null
+      - name: timestamp
+        tests:
+          - not_null

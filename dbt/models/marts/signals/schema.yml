@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: signals_stream_raw
+    description: "Raw streaming indicator events."
+    columns:
+      - name: event_id
+        description: "Unique event identifier."
+        tests:
+          - not_null
+          - unique
+      - name: indicator_id
+        description: "Indicator identifier."
+        tests:
+          - not_null
+      - name: event_time
+        description: "Time of the indicator event."
+        tests:
+          - not_null
+      - name: geo
+        description: "Geographic tag for the event."
+      - name: value
+        description: "Indicator value."
+        tests:
+          - not_null
+      - name: source_system
+        description: "Source connector/provider."
+        tests:
+          - not_null
+      - name: ingested_at
+        description: "Ingestion timestamp."
+        tests:
+          - not_null
+      - name: payload_json
+        description: "Raw payload as text."
+
+  - name: signals_nowcast_window
+    description: "Nowcasting window and baseline metrics per indicator."
+    columns:
+      - name: indicator_id
+        description: "Indicator identifier."
+      - name: window_start
+        description: "Start of window."
+      - name: window_end
+        description: "End of window."
+      - name: window_value
+        description: "Aggregated value over window."
+      - name: baseline_value
+        description: "Historical baseline value."
+      - name: delta_value
+        description: "Difference between window and baseline."
+      - name: delta_pct
+        description: "Relative change."
+
+  - name: signals_external_staging
+    description: "Staging table for external indicator data prior to replay."
+    columns:
+      - name: event_id
+        description: "Unique event id."
+      - name: indicator_id
+        description: "Indicator identifier."
+      - name: event_time
+        description: "Timestamp for the indicator event."
+      - name: geo
+        description: "Geo tag."
+      - name: value
+        description: "Value."
+      - name: source_system
+        description: "Source system/provider."
+      - name: payload_json
+        description: "Raw payload."

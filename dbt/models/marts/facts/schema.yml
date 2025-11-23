@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_demand_daily
+    description: "Daily demand fact by SKU"
+    columns:
+      - name: sku_id
+        tests:
+          - not_null
+      - name: demand_date
+        tests:
+          - not_null
+      - name: qty
+        tests:
+          - not_null
+          - non_negative
+      - name: family_id
+    tests:
+      - unique_combination:
+          arguments:
+            combination_of_columns: [sku_id, demand_date]

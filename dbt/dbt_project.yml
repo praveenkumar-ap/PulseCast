@@ -1,0 +1,56 @@
+name: "pulsecast_dbt"
+version: "1.0.0"
+config-version: 2
+
+profile: "pulsecast"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+models:
+  pulsecast_dbt:
+    +materialized: view
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: mart
+      +materialized: table
+      dimensions:
+        +materialized: table
+      facts:
+        +materialized: table
+      labels:
+        +materialized: table
+    alerts:
+      +schema: alerts
+      +materialized: table
+    scenarios:
+      +schema: scenarios
+      +materialized: table
+    inventory:
+      +schema: inventory
+      +materialized: table
+    indicators:
+      +schema: indicators
+      +materialized: table
+
+seeds:
+  pulsecast_dbt:
+    +schema: seed
+    seed_sku:
+      +column_types:
+        shelf_life_days: integer
+    seed_demand:
+      +column_types:
+        demand_date: date
+        qty: numeric
+    seed_indicators_catalog:
+      +column_types:
+        is_active: boolean
+        lead_time_days: numeric
+        has_native_forecast: boolean

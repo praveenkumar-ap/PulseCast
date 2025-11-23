@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: scenarios_ledger
+    description: "Append-only ledger of scenario events."
+    columns:
+      - name: ledger_id
+        description: "Primary key for ledger event."
+        tests:
+          - not_null
+          - unique
+      - name: scenario_id
+        description: "Scenario identifier."
+        tests:
+          - not_null
+      - name: version_seq
+        description: "Monotonic version per scenario."
+        tests:
+          - not_null
+      - name: action_type
+        description: "Type of event."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["CREATE", "EDIT", "APPROVE", "REJECT", "ARCHIVE", "COMMENT", "RUN_OPTIMIZER"]
+      - name: actor
+        description: "Actor performing the action."
+      - name: actor_role
+        description: "Role of actor."
+      - name: assumptions
+        description: "Assumptions or payload."
+      - name: comments
+        description: "Notes/comments."
+      - name: created_at
+        description: "Creation timestamp."
+        tests:
+          - not_null
+
+  - name: scenarios_ledger_latest
+    description: "Latest event per scenario for quick lookup."

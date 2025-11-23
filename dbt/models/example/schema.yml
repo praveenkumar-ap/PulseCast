@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: my_first_dbt_model
+    description: "Starter model for PulseCast dbt project"
+    columns:
+      - name: id
+        description: "Placeholder identifier"

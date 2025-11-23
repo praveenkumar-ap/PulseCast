@@ -1,0 +1,155 @@
+version: 2
+
+models:
+  - name: indicators_catalog
+    description: "Indicator catalog registry."
+    columns:
+      - name: indicator_id
+        description: "Primary key for indicator."
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Indicator name."
+        tests:
+          - not_null
+      - name: description
+        description: "Indicator description."
+      - name: category
+        description: "Indicator category such as HEALTH, WEATHER, MACRO."
+        tests:
+          - not_null
+      - name: frequency
+        description: "Data frequency."
+        tests:
+          - accepted_values:
+              values: ["DAILY", "WEEKLY", "MONTHLY", "STREAMING"]
+      - name: provider
+        description: "Source/provider identifier."
+        tests:
+          - not_null
+      - name: owner_team
+        description: "Owning team."
+      - name: owner_contact
+        description: "Contact for the owner team."
+      - name: geo_scope
+        description: "Geographic scope."
+      - name: unit
+        description: "Measurement unit."
+      - name: is_leading_indicator
+        description: "Whether the indicator is considered leading."
+      - name: default_lead_months
+        description: "Typical lead months vs demand."
+      - name: sla_freshness_hours
+        description: "Expected freshness SLA in hours."
+      - name: sla_coverage_notes
+        description: "Notes on SLA or coverage."
+      - name: owner_team
+        description: "Owning team."
+      - name: license_type
+        description: "License type."
+        tests:
+          - accepted_values:
+              values: ["PUBLIC", "PAID", "INTERNAL", "CUSTOM"]
+      - name: cost_model
+        description: "Cost model."
+      - name: cost_estimate_per_month
+        description: "Estimated monthly cost."
+      - name: status
+        description: "Lifecycle status."
+        tests:
+          - accepted_values:
+              values: ["ACTIVE", "DEPRECATED", "EXPERIMENTAL", "PENDING"]
+      - name: is_external
+        description: "Whether the source is external."
+      - name: is_byo
+        description: "Whether this indicator is BYOS registered."
+      - name: tags
+        description: "Comma separated tags."
+      - name: connector_type
+        description: "Connector type for ingestion."
+      - name: connector_config
+        description: "Connector configuration payload."
+      - name: created_at
+        description: "Creation timestamp."
+      - name: updated_at
+        description: "Update timestamp."
+
+  - name: indicators_quality
+    description: "Quality and trust metrics for indicators."
+    columns:
+      - name: indicator_id
+        description: "Indicator ID."
+        tests:
+          - not_null
+      - name: metric_date
+        description: "Metric reference date."
+      - name: correlation_score
+        description: "Correlation vs demand."
+      - name: correlation_stability_score
+        description: "Correlation stability score."
+      - name: importance_score
+        description: "Relative importance score."
+      - name: causality_score
+        description: "Causality score."
+      - name: data_completeness_pct
+        description: "Data completeness percent."
+      - name: lead_quality_score
+        description: "Lead quality score."
+      - name: last_correlation_range
+        description: "Last evaluation period description."
+      - name: last_eval_at
+        description: "Timestamp of last evaluation."
+      - name: is_recommended
+        description: "Recommendation flag."
+      - name: notes
+        description: "Additional notes."
+
+  - name: indicators_freshness
+    description: "Freshness and SLA tracking for indicators."
+    columns:
+      - name: indicator_id
+        description: "Indicator ID."
+        tests:
+          - not_null
+      - name: snapshot_time
+        description: "Snapshot timestamp for freshness."
+      - name: last_data_time
+        description: "Latest available data timestamp."
+      - name: lag_hours
+        description: "Lag between snapshot and latest data in hours."
+      - name: is_within_sla
+        description: "Whether within SLA."
+      - name: miss_count
+        description: "Number of missing expected drops."
+      - name: late_count
+        description: "Number of late arrivals."
+      - name: updated_at
+        description: "Update timestamp."
+
+  - name: indicators_trust_scores
+    description: "Derived trust scores combining catalog, quality, and freshness."
+    columns:
+      - name: indicator_id
+        description: "Indicator ID."
+        tests:
+          - not_null
+          - unique
+      - name: trust_score
+        description: "Composite trust score 0-100."
+      - name: lead_quality_score
+        description: "Lead quality component 0-100."
+      - name: stability_component
+        description: "Stability component 0-100."
+      - name: freshness_component
+        description: "Freshness component 0-100."
+      - name: correlation_score
+        description: "Correlation score."
+      - name: correlation_stability_score
+        description: "Correlation stability score."
+      - name: importance_score
+        description: "Importance score."
+      - name: causality_score
+        description: "Causality score."
+      - name: data_completeness_pct
+        description: "Data completeness percent."

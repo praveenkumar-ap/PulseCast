@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: label_sku_demand_10m_roll
+    description: "Monthly 10-month rolling demand labels by SKU"
+    columns:
+      - name: sku_id
+        tests:
+          - not_null
+      - name: year_month
+        tests:
+          - not_null
+      - name: demand_10m_rolling
+        tests:
+          - not_null
+          - non_negative

@@ -1,0 +1,6 @@
+sku_id,sku_code,sku_name,family_id,family_name,shelf_life_days,uom
+sku-100,SK100,Starter Kit,fam-10,Foundation Kits,365,kit
+sku-101,SK101,Starter Kit Deluxe,fam-10,Foundation Kits,365,kit
+sku-200,SK200,Sensor Bundle,fam-20,Electronics,730,bundle
+sku-201,SK201,Sensor Refill Pack,fam-20,Electronics,730,pack
+sku-300,SK300,Analytics Add-on,fam-30,Software,1095,license

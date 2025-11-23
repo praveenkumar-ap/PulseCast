@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: alerts_alerts
+    description: "Alerts table contract storing alert metadata and lifecycle status."
+    columns:
+      - name: alert_id
+        description: "Primary key for the alert (UUID)."
+        tests:
+          - not_null
+          - unique
+      - name: indicator_id
+        description: "External indicator or signal identifier related to the alert (nullable)."
+      - name: sku_id
+        description: "SKU identifier if the alert is SKU-specific (nullable)."
+      - name: geo_id
+        description: "Geographic identifier if the alert is geo-specific (nullable)."
+      - name: alert_type
+        description: "Type/category of alert."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["DEMAND_SPIKE", "DEMAND_DROP", "FEED_STALENESS"]
+      - name: severity
+        description: "Severity level of the alert."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+      - name: status
+        description: "Lifecycle status of the alert."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["OPEN", "ACKNOWLEDGED", "RESOLVED"]
+      - name: message
+        description: "Human-readable description of the alert."
+      - name: triggered_at
+        description: "Timestamp when the alert condition was detected."
+      - name: acknowledged_at
+        description: "Timestamp when the alert was acknowledged (nullable)."
+      - name: created_at
+        description: "Row creation timestamp."
+      - name: updated_at
+        description: "Row last update timestamp."

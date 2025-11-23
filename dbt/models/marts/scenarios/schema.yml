@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: scenarios_header
+    description: "Scenario headers capturing metadata and uplift settings."
+    columns:
+      - name: scenario_id
+        description: "Primary key for the scenario (UUID)."
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Scenario name."
+        tests:
+          - not_null
+      - name: description
+        description: "Scenario description."
+      - name: status
+        description: "Scenario status."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["DRAFT", "ACTIVE", "ARCHIVED"]
+      - name: base_run_id
+        description: "Base forecast run_id used for scenario generation."
+      - name: uplift_percent
+        description: "Uplift percentage applied to base forecasts."
+      - name: created_by
+        description: "User who created the scenario."
+        tests:
+          - not_null
+      - name: created_at
+        description: "Creation timestamp."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Last update timestamp."
+        tests:
+          - not_null
+
+  - name: scenarios_results
+    description: "Scenario results with adjusted forecasts per SKU and month."
+    columns:
+      - name: scenario_id
+        description: "Scenario identifier (UUID)."
+        tests:
+          - not_null
+      - name: sku_id
+        description: "SKU identifier."
+        tests:
+          - not_null
+      - name: year_month
+        description: "Month for the scenario forecast."
+        tests:
+          - not_null
+      - name: base_run_id
+        description: "Base forecast run_id used for this row."
+      - name: p10
+        description: "Adjusted P10 forecast."
+        tests:
+          - not_null
+      - name: p50
+        description: "Adjusted P50 forecast."
+        tests:
+          - not_null
+      - name: p90
+        description: "Adjusted P90 forecast."
+        tests:
+          - not_null
+      - name: created_at
+        description: "Row creation timestamp."
+        tests:
+          - not_null
+    tests:
+      - unique_combination:
+          arguments:
+            combination_of_columns: [scenario_id, sku_id, year_month]

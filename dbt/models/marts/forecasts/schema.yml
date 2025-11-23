@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: sku_forecasts
+    description: "Canonical forecast output table per SKU and month with quantile forecasts and run metadata."
+    columns:
+      - name: sku_id
+        description: "SKU identifier."
+        tests:
+          - not_null
+      - name: year_month
+        description: "Month bucket (first day of month)."
+        tests:
+          - not_null
+      - name: p10
+        description: "Lower quantile forecast (10th percentile)."
+      - name: p50
+        description: "Median forecast (50th percentile)."
+      - name: p90
+        description: "Upper quantile forecast (90th percentile)."
+      - name: run_id
+        description: "Identifier of the forecast run that produced the row."
+        tests:
+          - not_null
+      - name: created_at
+        description: "Row creation timestamp."
+        tests:
+          - not_null
+    tests:
+      - unique_combination:
+          arguments:
+            combination_of_columns: [sku_id, year_month, run_id]

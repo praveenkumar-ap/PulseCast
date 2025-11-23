@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pulsecast
+      POSTGRES_USER: pulsecast
+      POSTGRES_PASSWORD: pulsecast
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  svc-forecast:
+    build:
+      context: ../services/svc-forecast
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pulsecast
+      DB_USER: pulsecast
+      DB_PASSWORD: pulsecast
+    depends_on:
+      - postgres
+
+  svc-alerts:
+    build:
+      context: ../services/svc-alerts
+    ports:
+      - "8001:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pulsecast
+      DB_USER: pulsecast
+      DB_PASSWORD: pulsecast
+    depends_on:
+      - postgres
+
+  svc-scenario:
+    build:
+      context: ../services/svc-scenario
+    ports:
+      - "8002:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pulsecast
+      DB_USER: pulsecast
+      DB_PASSWORD: pulsecast
+    depends_on:
+      - postgres
+
+  pulsecast_api:
+    build:
+      context: ../services/pulsecast_api
+    ports:
+      - "8003:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pulsecast
+      DB_USER: pulsecast
+      DB_PASSWORD: pulsecast
+      AUTH_MODE: dev_header
+      DEFAULT_TENANT_ID: demo
+      ALLOWED_ROLES: "PLANNER,SOP_APPROVER,DATA_SCIENTIST,ADMIN,SUPPORT_OPERATOR"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
