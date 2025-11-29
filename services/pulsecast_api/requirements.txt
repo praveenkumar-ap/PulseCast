@@ -7,3 +7,9 @@ kafka-python
 requests
 pytest
 httpx
+passlib[bcrypt]
+email-validator
+pandas
+pyarrow
+boto3
+paramiko

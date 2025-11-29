@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pc-background: #0b1220;
+  --pc-surface: #0f172a;
+  --pc-panel: #111b30;
+  --pc-border: #1f2b3e;
+  --pc-contrast: #e5e7eb;
+  --pc-heading: #f8fafc;
+  --pc-muted: #94a3b8;
+  --pc-primary: #0ea5e9;
+  --pc-primary-strong: #0284c7;
+  --pc-accent: #f59e0b;
+  --pc-card-shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+  --pc-nav-height: 64px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #0f1d36 0, transparent 30%),
+    radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.15) 0, transparent 35%),
+    linear-gradient(135deg, #0b1220, #0e172b 45%, #0a1020);
+  color: var(--pc-contrast);
+  font-family: var(--font-geist-sans), "Suisse Intl", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--pc-heading);
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--pc-contrast);
+}
+
+::selection {
+  background: rgba(14, 165, 233, 0.15);
+  color: #f8fafc;
+}
+
+@layer components {
+  .card-surface {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+      var(--pc-surface);
+    border: 1px solid var(--pc-border);
+    border-radius: 16px;
+    box-shadow: var(--pc-card-shadow);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

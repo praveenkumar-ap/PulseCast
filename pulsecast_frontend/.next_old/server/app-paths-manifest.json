@@ -1,0 +1,5 @@
+{
+  "/api/backend/[...path]/route": "app/api/backend/[...path]/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(shell)/page": "app/(shell)/page.js"
+}

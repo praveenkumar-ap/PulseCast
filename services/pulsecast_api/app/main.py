@@ -3,7 +3,7 @@ from datetime import datetime
 import hashlib
 from uuid import uuid4
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
@@ -12,7 +12,7 @@ from .core.db import SessionLocal, get_db
 from .core.logging_config import configure_logging
 from .core.middleware import RequestLoggingMiddleware
 from .models.audit import APIAuditLog
-from .routers import alerts, forecasts, scenarios, optimizer, indicators, metrics, explain, signals, value, health as health_router
+from .routers import alerts, auth, forecasts, scenarios, optimizer, indicators, metrics, explain, signals, value, health as health_router
 
 
 class AuditMiddleware(BaseHTTPMiddleware):
@@ -73,6 +73,7 @@ def create_app() -> FastAPI:
 
     app.include_router(forecasts.router)
     app.include_router(alerts.router)
+    app.include_router(auth.router)
     app.include_router(scenarios.router)
     app.include_router(optimizer.router)
     app.include_router(indicators.router)
@@ -81,6 +82,21 @@ def create_app() -> FastAPI:
     app.include_router(signals.router)
     app.include_router(value.router)
     app.include_router(health_router.router)
+
+    # Compatibility prefix so clients using /api/... continue to work
+    api_router = APIRouter(prefix="/api")
+    api_router.include_router(forecasts.router)
+    api_router.include_router(alerts.router)
+    api_router.include_router(auth.router)
+    api_router.include_router(scenarios.router)
+    api_router.include_router(optimizer.router)
+    api_router.include_router(indicators.router)
+    api_router.include_router(metrics.router)
+    api_router.include_router(explain.router)
+    api_router.include_router(signals.router)
+    api_router.include_router(value.router)
+    api_router.include_router(health_router.router)
+    app.include_router(api_router)
     return app
 
 

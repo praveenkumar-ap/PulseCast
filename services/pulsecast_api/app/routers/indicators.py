@@ -18,6 +18,7 @@ from ..repositories.indicators_repo import (
     upsert_freshness,
     upsert_quality,
 )
+from ..repositories.indicator_sources_repo import list_sources, query_series
 from ..schemas.indicators import (
     ByosRegisterRequest,
     CreateIndicatorRequest,
@@ -34,6 +35,12 @@ from ..schemas.indicators import (
     UpdateIndicatorRequest,
     UpdateFreshnessRequest,
     UpdateQualityRequest,
+)
+from ..schemas.indicator_sources import (
+    IndicatorSeriesResponse,
+    IndicatorSourcesResponse,
+    IndicatorSourceSchema,
+    IndicatorSeriesRowSchema,
 )
 
 logger = logging.getLogger(__name__)
@@ -207,3 +214,48 @@ def register_byo_endpoint(payload: ByosRegisterRequest, db: Session = Depends(ge
         logger.error("DB error registering BYOS indicator", exc_info=exc)
         raise HTTPException(status_code=500, detail="Internal server error") from exc
     return IndicatorCatalogSchema.model_validate(cat)
+
+
+@router.get("/sources", response_model=IndicatorSourcesResponse)
+def list_indicator_sources(
+    status: Optional[str] = Query(default=None),
+    db: Session = Depends(get_db),
+) -> IndicatorSourcesResponse:
+    try:
+        rows = list_sources(db, status)
+    except SQLAlchemyError as exc:
+        logger.error("DB error listing indicator sources", exc_info=exc)
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
+    return IndicatorSourcesResponse(sources=[IndicatorSourceSchema.model_validate(r) for r in rows])
+
+
+@router.get("/series", response_model=IndicatorSeriesResponse)
+def list_indicator_series(
+    source_code: Optional[str] = Query(default=None),
+    indicator_code: Optional[str] = Query(default=None),
+    geo_key: Optional[str] = Query(default=None),
+    from_date: Optional[str] = Query(default=None),
+    to_date: Optional[str] = Query(default=None),
+    limit: int = Query(default=500, le=5000),
+    db: Session = Depends(get_db),
+) -> IndicatorSeriesResponse:
+    try:
+        rows = query_series(
+            db=db,
+            source_code=source_code,
+            indicator_code=indicator_code,
+            geo_key=geo_key,
+            from_date=_parse_date(from_date) if from_date else None,
+            to_date=_parse_date(to_date) if to_date else None,
+            limit=limit,
+        )
+    except SQLAlchemyError as exc:
+        logger.error("DB error listing indicator series", exc_info=exc)
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
+    return IndicatorSeriesResponse(series=[IndicatorSeriesRowSchema.model_validate(r) for r in rows])
+
+
+def _parse_date(val: str):
+    from datetime import date
+
+    return date.fromisoformat(val)

@@ -3,3 +3,5 @@ uvicorn
 psycopg[binary]
 sqlalchemy
 pydantic-settings
+passlib[bcrypt]
+email-validator
